@@ -1,1 +1,1 @@
-student system 
+student system management
