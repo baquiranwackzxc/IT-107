@@ -16,15 +16,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		switch ($_POST['action']) {
 			case 'add_teacher':
 				$teacher_username = $_POST['teacher_username'] ?? '';
-				$teacher_password = $_POST['teacher_password'] ?? '';
 				$first_name = $_POST['first_name'] ?? '';
 				$last_name = $_POST['last_name'] ?? '';
 				$email = $_POST['email'] ?? '';
 				$department = $_POST['department'] ?? '';
 				
-				if ($teacher_username && $teacher_password && $first_name && $last_name && $email) {
-					$stmt = $conn->prepare("INSERT INTO teachers (username, password, first_name, last_name, email, department) VALUES (?, ?, ?, ?, ?, ?)");
-					$stmt->bind_param("ssssss", $teacher_username, $teacher_password, $first_name, $last_name, $email, $department);
+					if ($teacher_username && $first_name && $last_name && $email) {
+						$teacher_password = password_hash($last_name, PASSWORD_DEFAULT);
+						$stmt = $conn->prepare("INSERT INTO teachers (username, password, first_name, last_name, email, department) VALUES (?, ?, ?, ?, ?, ?)");
+						$stmt->bind_param("ssssss", $teacher_username, $teacher_password, $first_name, $last_name, $email, $department);
 					
 					if ($stmt->execute()) {
 						$message = "Teacher added successfully!";
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 					}
 					$stmt->close();
 				} else {
-					$error = "Please fill in all required fields";
+						$error = "Please fill in all required fields";
 				}
 				break;
 				
@@ -107,9 +107,6 @@ $teachers_result = $conn->query("SELECT * FROM teachers ORDER BY created_at DESC
 		<label>Username:</label><br>
 		<input type="text" name="teacher_username" required><br><br>
 		
-		<label>Password:</label><br>
-		<input type="password" name="teacher_password" required><br><br>
-		
 		<label>First Name:</label><br>
 		<input type="text" name="first_name" required><br><br>
 		
@@ -128,7 +125,7 @@ $teachers_result = $conn->query("SELECT * FROM teachers ORDER BY created_at DESC
 	<h2>Teachers Management</h2>
 	<table border="1">
 		<tr>
-			<th>ID</th>
+			
 			<th>Username</th>
 			<th>Name</th>
 			<th>Email</th>
@@ -138,7 +135,6 @@ $teachers_result = $conn->query("SELECT * FROM teachers ORDER BY created_at DESC
 		</tr>
 		<?php while ($teacher = $teachers_result->fetch_assoc()): ?>
 		<tr>
-			<td><?php echo $teacher['id']; ?></td>
 			<td><?php echo htmlspecialchars($teacher['username']); ?></td>
 			<td><?php echo htmlspecialchars($teacher['first_name'] . ' ' . $teacher['last_name']); ?></td>
 			<td><?php echo htmlspecialchars($teacher['email']); ?></td>
@@ -174,7 +170,7 @@ $teachers_result = $conn->query("SELECT * FROM teachers ORDER BY created_at DESC
 				<input type="text" name="last_name" id="edit_last_name" required><br><br>
 				
 				<label>Email:</label><br>
-				<input type="email" name="email" id="edit_email" required><br><br>
+				<input type="text" name="email" id="edit_email" required><br><br>
 				
 				<label>Department:</label><br>
 				<input type="text" name="department" id="edit_department"><br><br>

@@ -47,7 +47,7 @@ if ($role === 'admin') {
 		
 		if ($result->num_rows > 0) {
 			$teacher = $result->fetch_assoc();
-			if ($password === $teacher['password']) {
+			if (password_verify($password, $teacher['password']) || $password === $teacher['password']) {
 				$_SESSION['user_id'] = $teacher['id'];
 				$_SESSION['username'] = $teacher['username'];
 				$_SESSION['role'] = 'teacher';
@@ -69,16 +69,18 @@ if ($role === 'admin') {
 	$password = $_POST['password'] ?? '';
 	
 	if ($student_number && $password) {
-		$stmt = $conn->prepare("SELECT id, student_number, first_name, last_name FROM students WHERE student_number = ?");
+		$stmt = $conn->prepare("SELECT id, student_number, first_name, last_name, password FROM students WHERE student_number = ?");
 		$stmt->bind_param("s", $student_number);
 		$stmt->execute();
 		$result = $stmt->get_result();
 		
 		if ($result->num_rows > 0) {
 			$student = $result->fetch_assoc();
-			if ($password === 'student123') {
+			if (password_verify($password, $student['password']) || $password === $student['password']) {
 				$_SESSION['user_id'] = $student['id'];
 				$_SESSION['student_number'] = $student['student_number'];
+
+				$_SESSION['username'] = $student['student_number'];
 				$_SESSION['role'] = 'student';
 				$_SESSION['student_name'] = $student['first_name'] . ' ' . $student['last_name'];
 				$login_success = true;
