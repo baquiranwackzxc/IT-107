@@ -1,20 +1,17 @@
 <?php
 session_start();
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'student' || !isset($_SESSION['username'])) {
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'student' || !isset($_SESSION['student_number'])) {
     header('Location: ../index.php');
     exit;
 }
 
 require_once __DIR__ . '/../config/db.php';
 
-$student_username = $_SESSION['username'];
+$student_number = $_SESSION['student_number'];
 
-// Get student info (match via users.username -> students.student_number or email)
-$stmt = $conn->prepare("SELECT s.* 
-                        FROM students s 
-                        JOIN users u ON u.username = s.student_number OR u.username = s.email
-                        WHERE u.username = ?");
-$stmt->bind_param("s", $student_username);
+// Get student info directly via student number from session
+$stmt = $conn->prepare("SELECT * FROM students WHERE student_number = ?");
+$stmt->bind_param("s", $student_number);
 $stmt->execute();
 $student_result = $stmt->get_result();
 $student = $student_result->fetch_assoc();

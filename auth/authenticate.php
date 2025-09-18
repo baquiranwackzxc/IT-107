@@ -69,16 +69,19 @@ if ($role === 'admin') {
 	$password = $_POST['password'] ?? '';
 	
 	if ($student_number && $password) {
-		$stmt = $conn->prepare("SELECT id, student_number, first_name, last_name FROM students WHERE student_number = ?");
+		$stmt = $conn->prepare("SELECT id, student_number, first_name, last_name, password FROM students WHERE student_number = ?");
 		$stmt->bind_param("s", $student_number);
 		$stmt->execute();
 		$result = $stmt->get_result();
 		
 		if ($result->num_rows > 0) {
 			$student = $result->fetch_assoc();
-			if ($password === 'student123') {
+			// Verify password against hashed value in DB
+			if (password_verify($password, $student['password'])) {
 				$_SESSION['user_id'] = $student['id'];
 				$_SESSION['student_number'] = $student['student_number'];
+				// Ensure dashboards that expect `username` also work
+				$_SESSION['username'] = $student['student_number'];
 				$_SESSION['role'] = 'student';
 				$_SESSION['student_name'] = $student['first_name'] . ' ' . $student['last_name'];
 				$login_success = true;
