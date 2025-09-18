@@ -9,6 +9,9 @@ require_once __DIR__ . '/../config/db.php';
 
 $student_number = $_SESSION['student_number'];
 
+
+
+
 $stmt = $conn->prepare("SELECT * FROM students WHERE student_number = ?");
 $stmt->bind_param("s", $student_number);
 $stmt->execute();

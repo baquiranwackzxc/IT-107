@@ -76,9 +76,17 @@ if ($role === 'admin') {
 		
 		if ($result->num_rows > 0) {
 			$student = $result->fetch_assoc();
+
 			if (password_verify($password, $student['password']) || $password === $student['password']) {
 				$_SESSION['user_id'] = $student['id'];
 				$_SESSION['student_number'] = $student['student_number'];
+
+=======
+
+			if (password_verify($password, $student['password'])) {
+				$_SESSION['user_id'] = $student['id'];
+				$_SESSION['student_number'] = $student['student_number'];
+				// Ensure dashboards that expect `username` also work
 
 				$_SESSION['username'] = $student['student_number'];
 				$_SESSION['role'] = 'student';

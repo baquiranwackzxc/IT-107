@@ -24,8 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     			$year_level = $_POST['year_level'] ?? '';
 
                 if ($student_number && $first_name && $last_name && $course && $year_level) {
-                    // Default password is the student's last name (hashed)
+                  
                     $password = password_hash($last_name, PASSWORD_DEFAULT);
+
+					// Default password is the student's last name (hashed)
+					$password = password_hash($last_name, PASSWORD_DEFAULT);
+
 
                     $stmt = $conn->prepare("INSERT INTO students (student_number, first_name, last_name, password, course, year_level, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())");
                     $stmt->bind_param("ssssss", $student_number, $first_name, $last_name, $password, $course, $year_level);
@@ -69,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $students_result = $conn->query("SELECT * FROM students ORDER BY created_at DESC");
 
 // Get subjects assigned to this teacher
-$subjects_result = $conn->query("SELECT * FROM subjects WHERE teacher_id = $teacher_id");
+$subjects_result = $conn->query("SELECT * FROM subjects WHERE id = $teacher_id");
 ?>
 
 <!DOCTYPE html>
