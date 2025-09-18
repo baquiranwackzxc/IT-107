@@ -9,7 +9,9 @@ require_once __DIR__ . '/../config/db.php';
 
 $student_number = $_SESSION['student_number'];
 
-// Get student info directly via student number from session
+
+
+
 $stmt = $conn->prepare("SELECT * FROM students WHERE student_number = ?");
 $stmt->bind_param("s", $student_number);
 $stmt->execute();
@@ -24,7 +26,6 @@ if (!$student) {
 
 $student_id = $student['id'];
 
-// Get grades for this student
 $stmt = $conn->prepare("SELECT g.grade, sub.subject_name 
                         FROM grades g
                         JOIN subjects sub ON g.subject_id = sub.id

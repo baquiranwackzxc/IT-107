@@ -19,7 +19,7 @@ $role = $_GET['role'] ?? 'guest'; // default if no role
 		<label>Username:</label>
 		<input type="text" name="username" required><br><br>
 		<?php } elseif ($role === 'student') { ?>
-		<label>Student Number:</label>
+		<label>Student ID:</label>
 		<input type="text" name="student_number" required><br><br>
 		<?php } elseif ($role === 'admin') { ?>
 		<label>Admin Username:</label>

@@ -54,6 +54,7 @@ CREATE TABLE `students` (
   `first_name` varchar(50) NOT NULL,
   `last_name` varchar(50) NOT NULL,
   `email` varchar(100) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
   `course` varchar(50) DEFAULT NULL,
   `year_level` int(2) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
