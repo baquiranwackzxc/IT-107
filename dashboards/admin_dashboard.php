@@ -10,7 +10,7 @@ require_once __DIR__ . '/../config/db.php';
 $message = '';
 $error = '';
 
-// Handle form submissions
+//form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if (isset($_POST['action'])) {
 		switch ($_POST['action']) {
@@ -196,7 +196,6 @@ $teachers_result = $conn->query("SELECT * FROM teachers ORDER BY created_at DESC
 			document.getElementById('editModal').style.display = 'none';
 		}
 
-		// Close modal when clicking outside
 		window.onclick = function(event) {
 			var modal = document.getElementById('editModal');
 			if (event.target == modal) {
