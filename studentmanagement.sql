@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 18, 2025 at 12:49 AM
+-- Generation Time: Sep 19, 2025 at 09:59 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,7 +40,10 @@ CREATE TABLE `grades` (
 --
 
 INSERT INTO `grades` (`id`, `student_id`, `subject_id`, `grade`, `created_at`) VALUES
-(1, 8, 1, 3.00, '2025-09-17 15:56:59');
+(5, 15, 0, 88.00, '2025-09-19 04:16:36'),
+(12, 16, 1, 89.00, '2025-09-19 04:34:52'),
+(13, 16, 2, 75.00, '2025-09-19 04:35:06'),
+(14, 17, 1, 88.00, '2025-09-19 04:36:24');
 
 -- --------------------------------------------------------
 
@@ -64,12 +67,9 @@ CREATE TABLE `students` (
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id`, `student_number`, `first_name`, `last_name`, `email`, `course`, `year_level`, `created_at`) VALUES
-(1, '2024-001', 'Alice', 'Brown', 'alice.brown@student.edu', 'Computer Science', 1, '2025-09-17 02:11:52'),
-(2, '2024-002', 'Bob', 'Wilson', 'bob.wilson@student.edu', 'Engineering', 2, '2025-09-17 02:11:52'),
-(3, '2024-003', 'Carol', 'Garcia', 'carol.garcia@student.edu', 'Business', 1, '2025-09-17 02:11:52'),
-(5, '2024-004', 'estrelle', 'maee', NULL, 'Qwertyy', 3, '2025-09-17 15:47:06'),
-(8, '2024-005', 'yezzy', 'yezz', NULL, 'BSIT', 3, '2025-09-17 15:56:08');
+INSERT INTO `students` (`id`, `student_number`, `first_name`, `last_name`, `email`, `password`, `course`, `year_level`, `created_at`) VALUES
+(16, '231-01423', 'Regie', 'Baquiran', 'sample@carsu.edu.ph', '$2y$10$bB6RLarkEdoNAtYC3WiGm.gXQ/e2IqUXiqA0QhwIo.pkZ9xO5SNAC', 'BSIT', 1, '2025-09-19 04:34:43'),
+(17, '2025-001', 'Wacky', 'Skibidi', 'delcarmenerica01@gmail.com', '$2y$10$a4CcCY5HAy6Dpp4uk3/Nke8F0oHxc3wS.zHycRsv8Ucb5R1/gzmm2', 'BSIS', 4, '2025-09-19 04:36:14');
 
 -- --------------------------------------------------------
 
@@ -89,8 +89,8 @@ CREATE TABLE `subjects` (
 --
 
 INSERT INTO `subjects` (`id`, `subject_name`, `teacher_id`, `created_at`) VALUES
-(1, 'Computer Programming', 4, '2025-09-17 15:54:13'),
-(2, 'Data Structures', 4, '2025-09-17 15:54:13');
+(1, 'LWR', 5, '2025-09-19 04:34:29'),
+(2, 'CSC 120', 5, '2025-09-19 04:34:58');
 
 -- --------------------------------------------------------
 
@@ -114,7 +114,7 @@ CREATE TABLE `teachers` (
 --
 
 INSERT INTO `teachers` (`id`, `username`, `password`, `first_name`, `last_name`, `email`, `department`, `created_at`) VALUES
-(4, 'regie1', 'regie', 'Regie', 'Baquiran', 'baquiran.regie@gmail.com', 'CCIS', '2025-09-17 03:23:32');
+(5, 'regie1', '$2y$10$Pclp3/cFkJiR/Uz9fUtYOujNy.FLeaTO6zIIn67T6tca4It4Gi2DS', 'Regie', 'Baquiran', 'delcarmenerica01@gmail.com', 'CCIS', '2025-09-19 01:21:18');
 
 -- --------------------------------------------------------
 
@@ -146,8 +146,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `role`, `created_at`) VALUES
 --
 ALTER TABLE `grades`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_grade` (`student_id`,`subject_id`),
-  ADD KEY `subject_id` (`subject_id`);
+  ADD UNIQUE KEY `unique_student_subject` (`student_id`,`subject_id`);
 
 --
 -- Indexes for table `students`
@@ -160,8 +159,7 @@ ALTER TABLE `students`
 -- Indexes for table `subjects`
 --
 ALTER TABLE `subjects`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `teacher_id` (`teacher_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `teachers`
@@ -185,13 +183,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `grades`
 --
 ALTER TABLE `grades`
-  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `subjects`
@@ -203,30 +201,13 @@ ALTER TABLE `subjects`
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
-  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(6) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `grades`
---
-ALTER TABLE `grades`
-  ADD CONSTRAINT `grades_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `students` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `grades_ibfk_2` FOREIGN KEY (`subject_id`) REFERENCES `subjects` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `subjects`
---
-ALTER TABLE `subjects`
-  ADD CONSTRAINT `subjects_ibfk_1` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
